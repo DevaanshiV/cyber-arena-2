@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate - CyberArena</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
+    </script>
+    <style>
+        :root {
+            --blue-50: #eff6ff;
+            --blue-100: #dbeafe;
+            --blue-200: #bfdbfe;
+            --blue-300: #93c5fd;
+            --blue-400: #60a5fa;
+            --blue-500: #3b82f6;
+            --blue-600: #2563eb;
+            --blue-700: #1d4ed8;
+            --blue-800: #1e40af;
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
+            --slate-400: #94a3b8;
+            --slate-500: #64748b;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
+            --white: #ffffff;
+            --gold: #c8a84e;
+            --gold-dark: #a68a3c;
+            --gold-light: #e0c878;
+            --gold-gradient: linear-gradient(135deg, #c8a84e, #e0c878, #c8a84e, #a68a3c);
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--slate-50);
+            color: var(--slate-800);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        /* ---------- NAVBAR (identical to dashboard) ---------- */
+        .navbar {
+            background: var(--white);
+            border-bottom: 1px solid var(--slate-200);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+        .navbar-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 68px;
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: var(--slate-900);
+            letter-spacing: -0.02em;
+        }
+        .nav-logo-icon {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--blue-600), var(--blue-500));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            list-style: none;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--slate-600);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color var(--transition-fast);
+            position: relative;
+            padding-bottom: 6px;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2.5px;
+            background: var(--blue-500);
+            border-radius: 4px;
+            transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--blue-600);
+        }
+        .nav-links a.active::after {
+            width: 100%;
+        }
+        .btn-logout {
+            background: transparent;
+            border: 1.5px solid var(--slate-300);
+            padding: 8px 18px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--slate-600);
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+        }
+        .btn-logout:hover {
+            background: #fee2e2;
+            border-color: #fca5a5;
+            color: #b91c1c;
+        }
+
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 8px;
+        }
+        .hamburger span {
+            display: block;
+            width: 26px;
+            height: 2.5px;
+            background: var(--slate-700);
+            border-radius: 4px;
+            transition: all var(--transition-smooth);
+        }
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 68px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            z-index: 99;
+            flex-direction: column;
+            padding: 32px;
+            gap: 24px;
+            transform: translateX(100%);
+            transition: transform var(--transition-smooth);
+        }
+        .mobile-menu.open {
+            transform: translateX(0);
+            display: flex;
+        }
+        .mobile-menu a {
+            text-decoration: none;
+            color: var(--slate-700);
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-bottom: 1px solid var(--slate-100);
+            padding-bottom: 12px;
+        }
+
+        /* ---------- PAGE CONTENT ---------- */
+        .certificate-page {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 32px 32px 60px;
+        }
+        .page-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--slate-900);
+            letter-spacing: -0.03em;
+        }
+        .page-header .subtitle {
+            color: var(--slate-500);
+            font-size: 0.95rem;
+            margin-top: 4px;
+        }
+
+        /* ---------- CERTIFICATE WRAPPER ---------- */
+        .certificate-wrapper {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            padding: 60px 50px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--slate-100);
+        }
+
+        /* Decorative border */
+        .certificate-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            right: 16px;
+            bottom: 16px;
+            border: 3px double var(--blue-300);
+            border-radius: 8px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Corner ornaments */
+        .corner-ornament {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .corner-ornament.top-left {
+            top: 28px;
+            left: 28px;
+            border-top: 4px solid var(--blue-500);
+            border-left: 4px solid var(--blue-500);
+            border-radius: 4px 0 0 0;
+        }
+        .corner-ornament.top-right {
+            top: 28px;
+            right: 28px;
+            border-top: 4px solid var(--blue-500);
+            border-right: 4px solid var(--blue-500);
+            border-radius: 0 4px 0 0;
+        }
+        .corner-ornament.bottom-left {
+            bottom: 28px;
+            left: 28px;
+            border-bottom: 4px solid var(--blue-500);
+            border-left: 4px solid var(--blue-500);
+            border-radius: 0 0 0 4px;
+        }
+        .corner-ornament.bottom-right {
+            bottom: 28px;
+            right: 28px;
+            border-bottom: 4px solid var(--blue-500);
+            border-right: 4px solid var(--blue-500);
+            border-radius: 0 0 4px 0;
+        }
+
+        /* Gold seal */
+        .gold-seal {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: var(--gold-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin: 0 auto 28px;
+            position: relative;
+            z-index: 3;
+            box-shadow: 0 6px 20px rgba(200, 168, 78, 0.35), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+            animation: sealPop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+        }
+        @keyframes sealPop {
+            from {
+                opacity: 0;
+                transform: scale(0.3) rotate(-30deg);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+        .gold-seal-inner {
+            width: 94px;
+            height: 94px;
+            border-radius: 50%;
+            border: 2.5px dashed rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+        }
+        .gold-seal-icon {
+            font-size: 2rem;
+            line-height: 1;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+        }
+        .gold-seal-text {
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: #5c3d0e;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: 2px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Certificate content */
+        .certificate-content {
+            text-align: center;
+            position: relative;
+            z-index: 3;
+        }
+        .certificate-header {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--slate-500);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .certificate-title {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 2.6rem;
+            font-weight: 900;
+            color: var(--slate-900);
+            letter-spacing: -0.01em;
+            margin-bottom: 6px;
+            line-height: 1.2;
+        }
+        .certificate-divider {
+            width: 120px;
+            height: 3px;
+            background: var(--gold-gradient);
+            margin: 16px auto;
+            border-radius: 4px;
+        }
+        .certificate-body {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 1.15rem;
+            color: var(--slate-600);
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+        .recipient-name {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: var(--blue-700);
+            margin: 10px 0 6px;
+            letter-spacing: -0.01em;
+            position: relative;
+            display: inline-block;
+        }
+        .recipient-name::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 15%;
+            right: 15%;
+            height: 2px;
+            background: var(--blue-300);
+            border-radius: 2px;
+        }
+        .certificate-description {
+            font-size: 1rem;
+            color: var(--slate-600);
+            max-width: 500px;
+            margin: 14px auto 0;
+            line-height: 1.7;
+        }
+        .certificate-details {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 32px;
+            flex-wrap: wrap;
+        }
+        .detail-item {
+            text-align: center;
+        }
+        .detail-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--slate-500);
+            margin-bottom: 4px;
+        }
+        .detail-value {
+            font-family: 'JetBrains Mono', 'Inter', monospace;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--slate-800);
+        }
+        .detail-value.xp {
+            color: var(--blue-600);
+            font-size: 1.3rem;
+        }
+
+        /* Action buttons */
+        .certificate-actions {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 36px;
+            position: relative;
+            z-index: 5;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border: none;
+            transition: all var(--transition-smooth);
+            text-decoration: none;
+            white-space: nowrap;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-primary {
+            background: var(--blue-600);
+            color: white;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+        }
+        .btn-primary:hover {
+            background: var(--blue-700);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+        .btn-outline {
+            background: var(--white);
+            color: var(--blue-600);
+            border: 2px solid var(--blue-300);
+        }
+        .btn-outline:hover {
+            background: var(--blue-50);
+            border-color: var(--blue-500);
+            transform: translateY(-2px);
+        }
+        .btn-gold {
+            background: var(--gold-gradient);
+            color: #3d2a00;
+            border: 2px solid var(--gold-dark);
+            font-weight: 700;
+            box-shadow: 0 4px 14px rgba(200, 168, 78, 0.3);
+        }
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(200, 168, 78, 0.45);
+        }
+
+        /* ---------- LOCKED STATE ---------- */
+        .locked-container {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            padding: 60px 40px;
+            text-align: center;
+            border: 1px solid var(--slate-100);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .locked-icon {
+            font-size: 5rem;
+            margin-bottom: 16px;
+            animation: floatLock 3s ease-in-out infinite;
+        }
+        @keyframes floatLock {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        .locked-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--slate-900);
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+        .locked-description {
+            color: var(--slate-500);
+            font-size: 1rem;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+        .progress-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .progress-text {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--slate-700);
+        }
+        .progress-bar-container {
+            width: 100%;
+            max-width: 350px;
+            margin: 0 auto;
+        }
+        .progress-bar-bg {
+            height: 12px;
+            background: var(--slate-200);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--blue-500), var(--blue-600));
+            border-radius: 20px;
+            transition: width 0.8s ease;
+        }
+        .progress-label-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--slate-500);
+            margin-top: 6px;
+        }
+
+        /* ---------- PRINT STYLES ---------- */
+        @media print {
+            body {
+                background: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .navbar,
+            .hamburger,
+            .mobile-menu,
+            .certificate-actions,
+            .page-header,
+            .btn-logout {
+                display: none !important;
+            }
+            .certificate-page {
+                padding: 0 !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+            }
+            .certificate-wrapper {
+                box-shadow: none !important;
+                border: none !important;
+                border-radius: 0 !important;
+                padding: 40px 50px !important;
+                page-break-inside: avoid;
+            }
+            .certificate-wrapper::before {
+                border-color: #2563eb !important;
+            }
+            .corner-ornament {
+                border-color: #2563eb !important;
+            }
+            .gold-seal {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .btn-logout.desktop {
+                display: none;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .mobile-menu {
+                display: flex;
+            }
+            .certificate-wrapper {
+                padding: 36px 24px;
+            }
+            .certificate-wrapper::before {
+                top: 10px;
+                left: 10px;
+                right: 10px;
+                bottom: 10px;
+            }
+            .corner-ornament {
+                width: 32px;
+                height: 32px;
+            }
+            .corner-ornament.top-left {
+                top: 18px;
+                left: 18px;
+            }
+            .corner-ornament.top-right {
+                top: 18px;
+                right: 18px;
+            }
+            .corner-ornament.bottom-left {
+                bottom: 18px;
+                left: 18px;
+            }
+            .corner-ornament.bottom-right {
+                bottom: 18px;
+                right: 18px;
+            }
+            .certificate-title {
+                font-size: 1.8rem;
+            }
+            .recipient-name {
+                font-size: 1.6rem;
+            }
+            .certificate-details {
+                gap: 28px;
+            }
+            .gold-seal {
+                width: 80px;
+                height: 80px;
+            }
+            .gold-seal-inner {
+                width: 66px;
+                height: 66px;
+            }
+            .gold-seal-icon {
+                font-size: 1.5rem;
+            }
+            .certificate-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            .certificate-actions .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        @media (max-width: 480px) {
+            .certificate-page {
+                padding: 16px 10px 40px;
+            }
+            .certificate-wrapper {
+                padding: 24px 16px;
+            }
+            .certificate-title {
+                font-size: 1.4rem;
+            }
+            .recipient-name {
+                font-size: 1.3rem;
+            }
+            .certificate-details {
+                flex-direction: column;
+                gap: 16px;
+            }
+            .locked-container {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar (identical to dashboard) -->
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="dashboard.html" class="nav-logo">
+                <div class="nav-logo-icon">&#128737;</div>
+                CyberArena
+            </a>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="challenges.html">Challenges</a></li>
+                <li><a href="leaderboard.html">Leaderboard</a></li>
+                <li><a href="certificates.html" class="active">Certificates</a></li>
+            </ul>
+            <button class="btn-logout desktop" onclick="logout()">Logout</button>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="challenges.html">Challenges</a>
+        <a href="leaderboard.html">Leaderboard</a>
+        <a href="certificates.html">Certificates</a>
+        <button class="btn-logout" style="margin-top:20px;" onclick="logout()">Logout</button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="certificate-page">
+        <div class="page-header">
+            <h1>📜 Your Certificate</h1>
+            <p class="subtitle">Earn verifiable credentials by completing CTF challenges</p>
+        </div>
+
+        <!-- Certificate (shown when 5 challenges solved) -->
+        <div id="certificateContainer" style="display:none;">
+            <div class="certificate-wrapper" id="certificateContent">
+                <!-- Corner ornaments -->
+                <div class="corner-ornament top-left"></div>
+                <div class="corner-ornament top-right"></div>
+                <div class="corner-ornament bottom-left"></div>
+                <div class="corner-ornament bottom-right"></div>
+
+                <!-- Gold seal -->
+                <div class="gold-seal">
+                    <div class="gold-seal-inner">
+                        <span class="gold-seal-icon">🛡️</span>
+                        <span class="gold-seal-text">Verified</span>
+                    </div>
+                </div>
+
+                <!-- Certificate text -->
+                <div class="certificate-content">
+                    <div class="certificate-header">CyberArena</div>
+                    <div class="certificate-title">Certificate of Achievement</div>
+                    <div class="certificate-divider"></div>
+                    <div class="certificate-body">This certificate is proudly awarded to</div>
+                    <div class="recipient-name" id="certRecipient">User</div>
+                    <div class="certificate-description">
+                        For successfully completing all CyberArena CTF challenges,
+                        demonstrating outstanding proficiency in web security, cryptography,
+                        OSINT, and digital forensics.
+                    </div>
+                    <div class="certificate-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Total Score</div>
+                            <div class="detail-value xp" id="certXP">0 XP</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Challenges Solved</div>
+                            <div class="detail-value" id="certSolved">0 / 5</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Date Issued</div>
+                            <div class="detail-value" id="certDate">—</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="certificate-actions">
+                <button class="btn btn-gold" onclick="downloadCertificate()">
+                    ⬇️ Download Certificate
+                </button>
+                <button class="btn btn-primary" onclick="printCertificate()">
+                    🖨️ Print Certificate
+                </button>
+            </div>
+        </div>
+
+        <!-- Locked state (shown when less than 5 challenges solved) -->
+        <div id="lockedContainer">
+            <div class="locked-container">
+                <div class="locked-icon">🔒</div>
+                <div class="locked-title">Certificate Locked</div>
+                <div class="locked-description">
+                    Complete all <strong>5 CTF challenges</strong> to unlock your
+                    official CyberArena Certificate of Achievement.
+                </div>
+                <div class="progress-info">
+                    <span class="progress-text" id="lockedProgressText">0 of 5 challenges solved</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="lockedProgressBar" style="width: 0%;"></div>
+                    </div>
+                    <div class="progress-label-row">
+                        <span>Progress</span>
+                        <span id="lockedPercent">0%</span>
+                    </div>
+                </div>
+                <div style="margin-top: 24px;">
+                    <a href="challenges.html" class="btn btn-primary">⚔️ Go to Challenges</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        (function() {
+            // ---------- Get user data from localStorage ----------
+            const username = localStorage.getItem('cyberarena_username') || 'User';
+            const xp = parseInt(localStorage.getItem('cyberarena_xp') || '0', 10);
+            const solvedChallenges = JSON.parse(localStorage.getItem('cyberarena_solvedChallenges') || '[]');
+            const solvedCount = Array.isArray(solvedChallenges) ? solvedChallenges.length : 0;
+            const totalChallenges = 5;
+            const isUnlocked = solvedCount >= totalChallenges;
+
+            const certificateContainer = document.getElementById('certificateContainer');
+            const lockedContainer = document.getElementById('lockedContainer');
+
+            // ---------- Show appropriate view ----------
+            if (isUnlocked) {
+                certificateContainer.style.display = 'block';
+                lockedContainer.style.display = 'none';
+
+                // Populate certificate
+                document.getElementById('certRecipient').textContent = username;
+                document.getElementById('certXP').textContent = xp.toLocaleString() + ' XP';
+                document.getElementById('certSolved').textContent = solvedCount + ' / ' + totalChallenges;
+
+                // Format current date
+                const now = new Date();
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                document.getElementById('certDate').textContent = now.toLocaleDateString('en-US', options);
+            } else {
+                certificateContainer.style.display = 'none';
+                lockedContainer.style.display = 'block';
+
+                // Update locked progress
+                document.getElementById('lockedProgressText').textContent =
+                    solvedCount + ' of ' + totalChallenges + ' challenges solved';
+                const percent = Math.round((solvedCount / totalChallenges) * 100);
+                document.getElementById('lockedProgressBar').style.width = percent + '%';
+                document.getElementById('lockedPercent').textContent = percent + '%';
+            }
+
+            // ---------- Download Certificate ----------
+            window.downloadCertificate = function() {
+                const certificateElement = document.getElementById('certificateContent');
+
+                // Show a brief loading indication
+                const downloadBtn = document.querySelector('.btn-gold');
+                const originalText = downloadBtn.textContent;
+                downloadBtn.textContent = '⏳ Generating...';
+                downloadBtn.disabled = true;
+
+                html2canvas(certificateElement, {
+                    scale: 3,
+                    useCORS: true,
+                    backgroundColor: '#ffffff',
+                    logging: false,
+                }).then(canvas => {
+                    // Convert to downloadable image
+                    const link = document.createElement('a');
+                    link.download = 'CyberArena_Certificate_' + username.replace(/\s+/g, '_') + '.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+
+                    // Reset button
+                    downloadBtn.textContent = originalText;
+                    downloadBtn.disabled = false;
+                }).catch(() => {
+                    // Fallback: use print as alternative
+                    window.print();
+                    downloadBtn.textContent = originalText;
+                    downloadBtn.disabled = false;
+                });
+            };
+
+            // ---------- Print Certificate ----------
+            window.printCertificate = function() {
+                window.print();
+            };
+
+            // ---------- Mobile Menu ----------
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            hamburger.addEventListener('click', () => {
+                mobileMenu.classList.toggle('open');
+                hamburger.classList.toggle('active');
+            });
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('open');
+                    hamburger.classList.remove('active');
+                });
+            });
+
+            // ---------- Logout ----------
+            window.logout = function() {
+                localStorage.removeItem('cyberarena_username');
+                window.location.href = 'signin.html';
+            };
+
+            // ---------- Animate progress bar on load ----------
+            if (!isUnlocked) {
+                setTimeout(() => {
+                    const percent = Math.round((solvedCount / totalChallenges) * 100);
+                    document.getElementById('lockedProgressBar').style.width = percent + '%';
+                }, 200);
+            }
+        })();
+    </script>
+</body>
+</html>

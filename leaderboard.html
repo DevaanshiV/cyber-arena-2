@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard - CyberArena</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue-50: #eff6ff;
+            --blue-100: #dbeafe;
+            --blue-200: #bfdbfe;
+            --blue-300: #93c5fd;
+            --blue-400: #60a5fa;
+            --blue-500: #3b82f6;
+            --blue-600: #2563eb;
+            --blue-700: #1d4ed8;
+            --blue-800: #1e40af;
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
+            --slate-400: #94a3b8;
+            --slate-500: #64748b;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--slate-50);
+            color: var(--slate-800);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ---------- NAVBAR (identical to dashboard) ---------- */
+        .navbar {
+            background: var(--white);
+            border-bottom: 1px solid var(--slate-200);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+        .navbar-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 68px;
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: var(--slate-900);
+            letter-spacing: -0.02em;
+        }
+        .nav-logo-icon {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--blue-600), var(--blue-500));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            list-style: none;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--slate-600);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color var(--transition-fast);
+            position: relative;
+            padding-bottom: 6px;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2.5px;
+            background: var(--blue-500);
+            border-radius: 4px;
+            transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--blue-600);
+        }
+        .nav-links a.active::after {
+            width: 100%;
+        }
+        .btn-logout {
+            background: transparent;
+            border: 1.5px solid var(--slate-300);
+            padding: 8px 18px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--slate-600);
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+        }
+        .btn-logout:hover {
+            background: #fee2e2;
+            border-color: #fca5a5;
+            color: #b91c1c;
+        }
+
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 8px;
+        }
+        .hamburger span {
+            display: block;
+            width: 26px;
+            height: 2.5px;
+            background: var(--slate-700);
+            border-radius: 4px;
+            transition: all var(--transition-smooth);
+        }
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 68px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            z-index: 99;
+            flex-direction: column;
+            padding: 32px;
+            gap: 24px;
+            transform: translateX(100%);
+            transition: transform var(--transition-smooth);
+        }
+        .mobile-menu.open {
+            transform: translateX(0);
+            display: flex;
+        }
+        .mobile-menu a {
+            text-decoration: none;
+            color: var(--slate-700);
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-bottom: 1px solid var(--slate-100);
+            padding-bottom: 12px;
+        }
+
+        /* ---------- LEADERBOARD CONTENT ---------- */
+        .leaderboard-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 32px 60px;
+        }
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .page-header .icon-row {
+            font-size: 2.5rem;
+            margin-bottom: 4px;
+        }
+        .page-header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--slate-900);
+            letter-spacing: -0.03em;
+            margin-bottom: 8px;
+        }
+        .page-header .subtitle {
+            color: var(--slate-500);
+            font-size: 1rem;
+        }
+
+        /* ---------- PODIUM (dashboard-style cards) ---------- */
+        .podium-section {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 24px;
+            margin-bottom: 48px;
+            flex-wrap: wrap;
+        }
+        .podium-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 28px 24px 24px;
+            text-align: center;
+            border: 1px solid var(--slate-100);
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-smooth);
+            min-width: 180px;
+            flex: 1;
+            max-width: 240px;
+        }
+        .podium-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
+            border-color: var(--blue-200);
+        }
+        .podium-card.rank-1 {
+            order: 2;
+            border-color: var(--blue-200);
+            box-shadow: var(--shadow-lg), 0 0 0 2px rgba(37, 99, 235, 0.2);
+            transform: scale(1.05);
+            z-index: 2;
+        }
+        .podium-card.rank-1:hover {
+            transform: scale(1.07) translateY(-6px);
+            box-shadow: var(--shadow-xl), 0 0 0 2px rgba(37, 99, 235, 0.25);
+        }
+        .podium-card.rank-2 {
+            order: 1;
+            z-index: 1;
+        }
+        .podium-card.rank-3 {
+            order: 3;
+            z-index: 1;
+        }
+        .podium-medal {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 8px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+        .rank-1 .podium-medal {
+            font-size: 3.6rem;
+        }
+        .podium-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.6rem;
+            color: white;
+            background: linear-gradient(135deg, var(--blue-600), var(--blue-500));
+            box-shadow: 0 4px 10px rgba(37,99,235,0.3);
+        }
+        .rank-1 .podium-avatar {
+            width: 76px;
+            height: 76px;
+            font-size: 1.9rem;
+        }
+        .podium-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--slate-900);
+            margin-bottom: 4px;
+        }
+        .podium-xp {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--blue-600);
+            font-family: 'JetBrains Mono', 'Inter', monospace;
+        }
+        .podium-rank-label {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            letter-spacing: 0.03em;
+            margin-top: 8px;
+            background: var(--blue-50);
+            color: var(--blue-700);
+        }
+
+        /* ---------- TABLE (clean, dashboard-style) ---------- */
+        .table-section {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--slate-100);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+        .table-header {
+            padding: 20px 28px;
+            border-bottom: 1px solid var(--slate-100);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .table-header h2 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--slate-900);
+            letter-spacing: -0.02em;
+        }
+        .badge-count {
+            background: var(--blue-50);
+            color: var(--blue-700);
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 6px 14px;
+            border-radius: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        thead th {
+            text-align: left;
+            padding: 14px 28px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--slate-500);
+            background: var(--slate-50);
+            border-bottom: 1px solid var(--slate-200);
+        }
+        thead th:first-child {
+            width: 80px;
+            text-align: center;
+        }
+        tbody td {
+            padding: 16px 28px;
+            border-bottom: 1px solid var(--slate-100);
+            font-size: 0.95rem;
+            vertical-align: middle;
+        }
+        tbody tr {
+            transition: background var(--transition-fast);
+        }
+        tbody tr:hover {
+            background: var(--slate-50);
+        }
+        tbody tr.current-user {
+            background: var(--blue-50);
+            border-left: 4px solid var(--blue-500);
+        }
+        .rank-cell {
+            text-align: center;
+            font-weight: 700;
+            color: var(--slate-600);
+        }
+        .rank-badge-inline {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--slate-100);
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--slate-700);
+        }
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .user-avatar-small {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-500), var(--blue-600));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+        .current-user .user-avatar-small {
+            box-shadow: 0 0 0 2px var(--blue-300);
+        }
+        .xp-cell {
+            font-family: 'JetBrains Mono', 'Inter', monospace;
+            font-weight: 600;
+            color: var(--blue-600);
+        }
+        .current-user-tag {
+            display: inline-block;
+            background: var(--blue-500);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 8px;
+            letter-spacing: 0.03em;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 900px) {
+            .podium-section {
+                gap: 16px;
+            }
+            .podium-card {
+                padding: 20px 16px;
+            }
+        }
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .btn-logout.desktop {
+                display: none;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .mobile-menu {
+                display: flex;
+            }
+            .podium-section {
+                flex-direction: column;
+                align-items: center;
+            }
+            .podium-card {
+                max-width: 100%;
+                width: 100%;
+                order: unset !important;
+            }
+            .podium-card.rank-1 {
+                transform: none;
+                order: -1 !important;
+            }
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+            thead {
+                display: none;
+            }
+            tbody tr {
+                display: flex;
+                flex-wrap: wrap;
+                padding: 16px;
+                border-bottom: 1px solid var(--slate-100);
+            }
+            tbody td {
+                padding: 0;
+                border-bottom: none;
+            }
+            .rank-cell {
+                width: 40px;
+                order: 1;
+            }
+            .user-cell {
+                flex: 1;
+                order: 2;
+            }
+            .xp-cell {
+                width: 100%;
+                text-align: right;
+                order: 3;
+            }
+        }
+        @media (max-width: 480px) {
+            .leaderboard-page {
+                padding: 24px 16px 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar (identical to dashboard) -->
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="dashboard.html" class="nav-logo">
+                <div class="nav-logo-icon">&#128737;</div>
+                CyberArena
+            </a>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="challenges.html">Challenges</a></li>
+                <li><a href="leaderboard.html" class="active">Leaderboard</a></li>
+                <li><a href="certificates.html">Certificates</a></li>
+            </ul>
+            <button class="btn-logout desktop" onclick="logout()">Logout</button>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="challenges.html">Challenges</a>
+        <a href="leaderboard.html">Leaderboard</a>
+        <a href="certificates.html">Certificates</a>
+        <button class="btn-logout" style="margin-top:20px;" onclick="logout()">Logout</button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="leaderboard-page">
+        <div class="page-header">
+            <div class="icon-row">🏆</div>
+            <h1>Global Leaderboard</h1>
+            <p class="subtitle">Top cybersecurity competitors this season</p>
+        </div>
+
+        <!-- Podium Section -->
+        <div class="podium-section">
+            <!-- Rank 2 - Bob -->
+            <div class="podium-card rank-2">
+                <span class="podium-medal">🥈</span>
+                <div class="podium-avatar">B</div>
+                <div class="podium-name">Bob</div>
+                <div class="podium-xp" data-target="950">0 XP</div>
+                <span class="podium-rank-label">2nd Place</span>
+            </div>
+
+            <!-- Rank 1 - Alice -->
+            <div class="podium-card rank-1">
+                <span class="podium-medal">🥇</span>
+                <div class="podium-avatar">A</div>
+                <div class="podium-name">Alice</div>
+                <div class="podium-xp" data-target="1200">0 XP</div>
+                <span class="podium-rank-label">Champion</span>
+            </div>
+
+            <!-- Rank 3 - Charlie -->
+            <div class="podium-card rank-3">
+                <span class="podium-medal">🥉</span>
+                <div class="podium-avatar">C</div>
+                <div class="podium-name">Charlie</div>
+                <div class="podium-xp" data-target="850">0 XP</div>
+                <span class="podium-rank-label">3rd Place</span>
+            </div>
+        </div>
+
+        <!-- Leaderboard Table -->
+        <div class="table-section">
+            <div class="table-header">
+                <h2>All Competitors</h2>
+                <span class="badge-count" id="totalPlayers">6 players</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>User</th>
+                        <th>XP</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Rows will be injected by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        (function() {
+            // ---------- Get current user data from localStorage ----------
+            const currentUsername = localStorage.getItem('cyberarena_username') || 'You';
+            const currentUserXP = parseInt(localStorage.getItem('cyberarena_xp') || '0', 10);
+
+            // ---------- Leaderboard Data ----------
+            const podiumUsers = [
+                { name: 'Alice', xp: 1200, rank: 1 },
+                { name: 'Bob', xp: 950, rank: 2 },
+                { name: 'Charlie', xp: 850, rank: 3 },
+            ];
+
+            const tableUsers = [
+                { name: currentUsername, xp: currentUserXP, rank: 4, isCurrentUser: true },
+                { name: 'Ethan', xp: 600, rank: 5, isCurrentUser: false },
+                { name: 'Mia', xp: 500, rank: 6, isCurrentUser: false },
+            ];
+
+            // Combine all users and sort by XP descending to dynamically assign ranks
+            const allUsers = [
+                ...podiumUsers,
+                { name: currentUsername, xp: currentUserXP, isCurrentUser: true },
+                { name: 'Ethan', xp: 600, isCurrentUser: false },
+                { name: 'Mia', xp: 500, isCurrentUser: false },
+            ].sort((a, b) => b.xp - a.xp).map((user, index) => {
+                user.rank = index + 1;
+                return user;
+            });
+
+            // Separate podium (top 3) and table (rest)
+            const sortedPodium = allUsers.slice(0, 3);
+            const sortedTable = allUsers.slice(3);
+
+            // Rebuild podium dynamically
+            const podiumContainer = document.querySelector('.podium-section');
+            podiumContainer.innerHTML = '';
+
+            // Order: 2nd, 1st, 3rd for visual layout
+            const displayOrder = [1, 0, 2]; // indices corresponding to sortedPodium[1] (2nd), sortedPodium[0] (1st), sortedPodium[2] (3rd)
+            const rankClasses = ['rank-2', 'rank-1', 'rank-3'];
+
+            displayOrder.forEach((sortedIndex, pos) => {
+                const user = sortedPodium[sortedIndex];
+                const medalEmoji = user.rank === 1 ? '🥇' : user.rank === 2 ? '🥈' : '🥉';
+                const rankLabel = user.rank === 1 ? 'Champion' : user.rank === 2 ? '2nd Place' : '3rd Place';
+                const avatarLetter = user.name.charAt(0).toUpperCase();
+
+                const card = document.createElement('div');
+                card.className = `podium-card ${rankClasses[pos]}`;
+                card.innerHTML = `
+                    <span class="podium-medal">${medalEmoji}</span>
+                    <div class="podium-avatar">${avatarLetter}</div>
+                    <div class="podium-name">${user.name}${user.isCurrentUser ? ' <span style="font-size:0.75rem;color:#2563eb;">(You)</span>' : ''}</div>
+                    <div class="podium-xp" data-target="${user.xp}">0 XP</div>
+                    <span class="podium-rank-label">${rankLabel}</span>
+                `;
+                podiumContainer.appendChild(card);
+            });
+
+            // Build table
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
+            sortedTable.forEach(user => {
+                const tr = document.createElement('tr');
+                if (user.isCurrentUser) tr.classList.add('current-user');
+                const avatarLetter = user.name.charAt(0).toUpperCase();
+
+                tr.innerHTML = `
+                    <td class="rank-cell">
+                        <span class="rank-badge-inline">#${user.rank}</span>
+                    </td>
+                    <td class="user-cell">
+                        <div class="user-avatar-small">${avatarLetter}</div>
+                        ${user.name}
+                        ${user.isCurrentUser ? '<span class="current-user-tag">YOU</span>' : ''}
+                    </td>
+                    <td class="xp-cell" data-target="${user.xp}">0 XP</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+
+            document.getElementById('totalPlayers').textContent = `${allUsers.length} players`;
+
+            // Animated XP counters
+            function animateCounters() {
+                const xpElements = document.querySelectorAll('[data-target]');
+                xpElements.forEach(el => {
+                    const target = parseInt(el.getAttribute('data-target'));
+                    const duration = 1500;
+                    const startTime = performance.now();
+
+                    function update(now) {
+                        const elapsed = now - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+                        const current = Math.round(target * eased);
+                        el.textContent = current.toLocaleString() + ' XP';
+                        if (progress < 1) {
+                            requestAnimationFrame(update);
+                        } else {
+                            el.textContent = target.toLocaleString() + ' XP';
+                        }
+                    }
+                    requestAnimationFrame(update);
+                });
+            }
+            setTimeout(animateCounters, 200);
+
+            // ---------- Mobile Menu ----------
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            hamburger.addEventListener('click', () => {
+                mobileMenu.classList.toggle('open');
+                hamburger.classList.toggle('active');
+            });
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('open');
+                    hamburger.classList.remove('active');
+                });
+            });
+
+            // ---------- Logout ----------
+            window.logout = function() {
+                localStorage.removeItem('cyberarena_username');
+                window.location.href = 'signin.html';
+            };
+        })();
+    </script>
+</body>
+</html>
