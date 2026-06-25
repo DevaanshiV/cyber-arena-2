@@ -1,0 +1,3 @@
+CyberArena Investigation Report
+
+CTF{f0r3ns1cs_m4st3r}
